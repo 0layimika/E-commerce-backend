@@ -7,7 +7,7 @@ const auth = require("./routes/api/auth")
 const product = require("./routes/api/product")
 const admin = require("./routes/api/admin")
 const cart = require("./routes/api/cart")
-
+const checkout = require("./routes/api/checkout")
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
@@ -26,3 +26,4 @@ app.use("/api/auth", auth)
 app.use("/api/product",product)
 app.use("/api/admin", admin)
 app.use("/api/cart", cart)
+app.use('/api/checkout', checkout)

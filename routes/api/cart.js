@@ -154,14 +154,20 @@ router.delete('/',[auth], async(req,res)=>{
 //Get cart details
 router.get('/',[auth], async(req,res)=>{
   try{
-    const cart = await Cart.findOne({user:req.user.id})
+    const cart = await Cart.findOne({user:req.user.id}).populate('products.product')
     if(!cart){
       return res.status(404).json({ error: { msg: "Your cart is empty(not yet initiated)" } });
     }
     if(cart.products.length === 0){
       return res.send("Cart is empty")
     }
-    res.status(200).json(cart)
+    let total_price= 0
+    for (let item of cart.products) {
+        if (item.product && item.product.price) {
+            total_price += item.product.price * item.quantity;
+        }
+    }
+    res.status(200).json({cart, "total price": total_price});
   }catch(err){
     console.error(err.message)
     return res.status(400).send("Server Error !!!!")
